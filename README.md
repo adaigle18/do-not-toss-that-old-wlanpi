@@ -116,7 +116,7 @@ The same 128×64 frames the NanoHat displays, served as PNG on the sensor (port 
 
 Built on the shoulders of the [WLAN Pi](https://www.wlanpi.com) project and community, [Armbian](https://www.armbian.com), [Orb](https://orb.net), [Tailscale](https://tailscale.com), [luma.oled](https://github.com/rm-hull/luma.oled) and the [Model Context Protocol](https://modelcontextprotocol.io). Not affiliated with any of them.
 
-Presented as a TEN Talk proposal for WLPC: *"Do Not Toss That Old WLAN Pi!"*.
+Submitted as a talk proposal for #WLPC Phoenix 2027: *"Do Not Toss That Old WLAN Pi!"* (community vote Nov 15–30, 2026).
 
 ## License
 
