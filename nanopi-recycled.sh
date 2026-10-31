@@ -167,12 +167,12 @@ systemctl stop netplan-wpa-$IFACE.service 2>/dev/null
 # mt76 bug (mt7921u/mt7925u): once associated, the radio ignores channel changes in
 # monitor mode. Reloading the driver lets it retune before any association.
 DRV=\$(basename "\$(readlink /sys/class/net/$IFACE/device/driver 2>/dev/null)")
-case "\$DRV" in mt79*)
+if [ "\${DRV#mt79}" != "\$DRV" ]; then
   log "↻ Reloading \$DRV (mt76 bug: otherwise the radio stays on the old channel)"
   ip link set $IFACE down; modprobe -r \$DRV; sleep 2; modprobe \$DRV
   for i in \$(seq 1 20); do ip link show $IFACE >/dev/null 2>&1 && break; sleep 0.5; done
-  systemctl stop netplan-wpa-$IFACE.service 2>/dev/null; pkill -f "wpa_supplicant.*$IFACE" 2>/dev/null ;;
-esac
+  systemctl stop netplan-wpa-$IFACE.service 2>/dev/null; pkill -f "wpa_supplicant.*$IFACE" 2>/dev/null
+fi
 ip link set $IFACE down
 iw dev $IFACE set type monitor || { log "✘ Monitor mode refused by the driver"; exit 1; }
 ip addr flush dev $IFACE 2>/dev/null
