@@ -1,0 +1,16 @@
+{
+  "sensors": {
+    "sensor-neo2-01": {
+      "host": "192.168.1.50",
+      "user": "root",
+      "site": "Lab",
+      "wifi_iface": "auto"
+    },
+    "sensor-neo3-01": {
+      "host": "100.64.0.10",
+      "user": "root",
+      "site": "Client site (Tailscale)",
+      "wifi_iface": "auto"
+    }
+  }
+}

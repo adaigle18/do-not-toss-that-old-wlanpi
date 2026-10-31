@@ -1,0 +1,16 @@
+# Local config and data — may contain IPs, scan results, Wi-Fi passwords
+sensors.json
+reports/
+captures/
+backups/
+*.pcap
+*.pcapng
+
+# Python / runtime
+.venv/
+__pycache__/
+*.pyc
+dashboard.log
+
+# OS
+.DS_Store
