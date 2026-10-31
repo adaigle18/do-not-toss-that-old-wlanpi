@@ -41,6 +41,13 @@ for H in "${HOSTS[@]}"; do
       "bash -s -- ${OPTS[*]:-}" < "$SCRIPT" | tee "$OUT"
   if [ "${PIPESTATUS[0]}" -eq 0 ] && grep -q "End of diagnostic" "$OUT"; then
     echo "✔ Report: $OUT"
+    # Formatted workbook for Numbers / Excel (needs openpyxl in .venv)
+    PY="$DIR/.venv/bin/python"; [ -x "$PY" ] || PY="$(command -v python3)"
+    if [ -f "$DIR/report2xlsx.py" ] && "$PY" -c "import openpyxl" 2>/dev/null; then
+      X="${OUT%.txt}.xlsx"
+      "$PY" "$DIR/report2xlsx.py" "$OUT" "$X" >/dev/null && echo "✔ Workbook: $X"
+      [ -d /Applications/Numbers.app ] && [ "${NO_OPEN:-}" != 1 ] && open -a Numbers "$X"
+    fi
   else
     rm -f "$OUT"; echo "✘ Could not connect to $H — no report saved"
   fi

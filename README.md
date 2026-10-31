@@ -57,6 +57,7 @@ ssh-copy-id root@192.168.1.50
 | `dashboard.py` / `dashboard.sh` | laptop | Local web UI: link, sensor health, nearby APs, live OLED, one-click capture |
 | `server.py` | laptop | MCP server with 11 tools (see below) |
 | `diag.sh` + `sensor-diag.sh` | laptop → sensor | Full health report, streamed over SSH (nothing copied), saved to `reports/` |
+| `report2xlsx.py` | laptop | Turns a `diag.sh` report into a formatted workbook (Numbers / Excel); `diag.sh` calls it automatically |
 | `backup-sensor.sh` | laptop | Config backup to `backups/` (mode 600, no Tailscale/Orb identity) |
 | `install-oled.sh` | sensor | Status screen: `hw` (NanoHat OLED), `web` (virtual) or `both` |
 | `prepare-sensor.sh` | sensor | Optional: least-privilege setup for a non-root SSH user |

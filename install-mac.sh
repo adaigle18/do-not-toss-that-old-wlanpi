@@ -11,7 +11,7 @@ echo "==> Python: $PY ($($PY --version))"
 
 $PY -m venv .venv
 .venv/bin/pip install -q --upgrade pip
-.venv/bin/pip install -q "mcp[cli]"
+.venv/bin/pip install -q "mcp[cli]" openpyxl
 .venv/bin/python -c "import server; print('==> server.py OK')"
 
 [ -f sensors.json ] || { cp sensors.example.json sensors.json; echo "==> Created sensors.json from the example — edit it"; }

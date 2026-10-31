@@ -5,6 +5,7 @@ What matters for this project: a **mainline Linux driver** (no DKMS), **monitor 
 | Adapter | Chipset / driver | Bands | Client (Orb) | Monitor | Notes |
 |---|---|---|---|---|---|
 | Netgear A9000 | MediaTek MT7925U / `mt7925u` | 2.4 / 5 / 6 GHz (Wi-Fi 7) | ✅ | ✅ 2.4 / 5 / 6 GHz | Monitor mode only retunes after a driver reload (mt76 bug, handled automatically by `nanopi-recycled.sh`). Verified: 88 beacons from a 6 GHz AP on ch 197 in 10 s. Occasional boot probe error `-110`: replug or reboot. |
+| Panda Wireless PAU0F AXE3000 | MediaTek MT7921AU / `mt7921u` (0e8d:7961) | 2.4 / 5 / 6 GHz (Wi-Fi 6E) | ✅ | ✅ 6 GHz (2.4/5 to confirm) | Same mt76 retune bug, same automatic driver reload. Verified: 6 GHz ch 197 beacons with EHT Capabilities decoded in Wireshark. Sees Wi-Fi 7 beacons, but cannot decode EHT PPDUs (Wi-Fi 6E radio). |
 | Netgear A6200 | Broadcom | 2.4 / 5 GHz | ❌ | ❌ | No usable mainline driver in this setup. Skip it. |
 | Linksys (USB, Wi-Fi 5) | check with `lsusb` | 2.4 / 5 GHz | ✅ | ✅ | Worked as a client on the NEO2. Exact chipset to be documented. |
 
