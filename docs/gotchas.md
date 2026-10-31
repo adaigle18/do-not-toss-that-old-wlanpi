@@ -10,6 +10,8 @@
 
 **ARP flux.** Two NICs on the same subnet means the board answers ARP for the Wi-Fi IP on Ethernet (and vice versa). SSH then dies the moment Wi-Fi goes into monitor mode. Fix: `arp_ignore=1`, `arp_announce=2`, then `arping -U` on the remaining link.
 
+**Monitor mode stuck on the old channel (mt76: mt7921u / mt7925u).** Once the adapter has been associated, `iw dev wlan0 set freq` returns success and `iw info` shows the new channel, but the radio keeps listening on the channel it was connected to. Check the radiotap frequency in your capture, not `iw`. Known mainline mac80211/mt76 issue (monitor vif without a channel context). Workaround: reload the driver (`modprobe -r mt7925u; modprobe mt7925u`) and switch to monitor before any association. `nanopi-recycled.sh` does this automatically.
+
 **"Malformed radiotap v255" in Wireshark.** Those are the host's own outgoing frames. Capture with `tcpdump -Q in`.
 
 **Orb can't see nearby APs.** The service needs `CAP_NET_ADMIN CAP_NET_RAW` (a systemd drop-in installed by `sensor-setup.sh`) *and* the nearby-AP poll interval enabled in Orb settings.

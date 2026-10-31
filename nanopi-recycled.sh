@@ -98,7 +98,7 @@ status)
     [ -f /run/nanopi-recycled.state ] && echo \"Capturing since: \$(cat /run/nanopi-recycled.state)\" || true"
   exit $? ;;
 restore)
-  ssh "${SSH_OPTS[@]}" "$TARGET" "pkill -f '[t]cpdump -i $IFACE' 2>/dev/null; pkill -f '[w]lanpi-lite-watchdog' 2>/dev/null; $RESTORE; sleep 6; iw dev $IFACE link | grep -E 'SSID|freq' || echo 'Not associated yet (give it a few seconds)'"
+  ssh "${SSH_OPTS[@]}" "$TARGET" "pkill -f '[t]cpdump -i $IFACE' 2>/dev/null; pkill -f '[n]anopi-recycled-watchdog' 2>/dev/null; $RESTORE; sleep 6; iw dev $IFACE link | grep -E 'SSID|freq' || echo 'Not associated yet (give it a few seconds)'"
   exit $? ;;
 capture) ;;
 *) usage ;;
@@ -153,7 +153,7 @@ command -v arping >/dev/null && arping -q -U -c 3 -I "\$ALT" "\$ALTIP" >/dev/nul
 
 restore() {
   trap - EXIT HUP INT TERM PIPE
-  pkill -f '[w]lanpi-lite-watchdog' 2>/dev/null
+  pkill -f '[n]anopi-recycled-watchdog' 2>/dev/null
   $RESTORE
   log "↺ $IFACE back in client mode — Orb is measuring Wi-Fi again"
 }
@@ -164,6 +164,15 @@ date '+%H:%M:%S' > /run/nanopi-recycled.state
 trap restore EXIT HUP INT TERM PIPE
 
 systemctl stop netplan-wpa-$IFACE.service 2>/dev/null
+# mt76 bug (mt7921u/mt7925u): once associated, the radio ignores channel changes in
+# monitor mode. Reloading the driver lets it retune before any association.
+DRV=\$(basename "\$(readlink /sys/class/net/$IFACE/device/driver 2>/dev/null)")
+case "\$DRV" in mt79*)
+  log "↻ Reloading \$DRV (mt76 bug: otherwise the radio stays on the old channel)"
+  ip link set $IFACE down; modprobe -r \$DRV; sleep 2; modprobe \$DRV
+  for i in \$(seq 1 20); do ip link show $IFACE >/dev/null 2>&1 && break; sleep 0.5; done
+  systemctl stop netplan-wpa-$IFACE.service 2>/dev/null; pkill -f "wpa_supplicant.*$IFACE" 2>/dev/null ;;
+esac
 ip link set $IFACE down
 iw dev $IFACE set type monitor || { log "✘ Monitor mode refused by the driver"; exit 1; }
 ip addr flush dev $IFACE 2>/dev/null

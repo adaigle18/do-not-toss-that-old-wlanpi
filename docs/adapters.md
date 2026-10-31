@@ -4,7 +4,7 @@ What matters for this project: a **mainline Linux driver** (no DKMS), **monitor 
 
 | Adapter | Chipset / driver | Bands | Client (Orb) | Monitor | Notes |
 |---|---|---|---|---|---|
-| Netgear A9000 | MediaTek MT7925U / `mt7925u` | 2.4 / 5 / 6 GHz (Wi-Fi 7) | ✅ | ✅ 2.4/5 · ⚠️ 6 GHz | 6 GHz monitor capture returns almost nothing so far (width test pending). Occasional boot probe error `-110`: replug or reboot. |
+| Netgear A9000 | MediaTek MT7925U / `mt7925u` | 2.4 / 5 / 6 GHz (Wi-Fi 7) | ✅ | ✅ 2.4 / 5 / 6 GHz | Monitor mode only retunes after a driver reload (mt76 bug, handled automatically by `nanopi-recycled.sh`). Verified: 88 beacons from a 6 GHz AP on ch 197 in 10 s. Occasional boot probe error `-110`: replug or reboot. |
 | Netgear A6200 | Broadcom | 2.4 / 5 GHz | ❌ | ❌ | No usable mainline driver in this setup. Skip it. |
 | Linksys (USB, Wi-Fi 5) | check with `lsusb` | 2.4 / 5 GHz | ✅ | ✅ | Worked as a client on the NEO2. Exact chipset to be documented. |
 
